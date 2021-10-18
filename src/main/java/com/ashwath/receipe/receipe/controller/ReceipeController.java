@@ -18,16 +18,15 @@ import java.util.Optional;
 
 @RestController
 public class ReceipeController {
-    private String url = "https://s3-ap-southeast-1.amazonaws.com/he-public-data/reciped9d7b8c.json";
+    private final String url = "https://s3-ap-southeast-1.amazonaws.com/he-public-data/reciped9d7b8c.json";
 
     @Autowired
     ReceipeRepository receipeRepository;
-
     @Autowired
     RestTemplate restTemplate;
 
     @GetMapping(value = "/")
-    public ResponseEntity<List<Receipe>> index() {
+    public ResponseEntity<List<Receipe>> id() {
         if (receipeRepository.findAll().size() == 0) {
             ResponseEntity<List<Receipe>> receipes = restTemplate.exchange(
                     url,
@@ -54,14 +53,14 @@ public class ReceipeController {
     }
 
     @GetMapping(value = "/{id}/show")
-    public ResponseEntity getReceipeImage(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<String> getReceipeImage(@PathVariable(value = "id") Long id) {
         Optional<Receipe> receipe = receipeRepository.findById(id);
-        return receipe.<ResponseEntity>map(value -> ResponseEntity.ok(value.getImage()))
+        return receipe.map(value -> ResponseEntity.ok(value.getImage()))
                 .orElseGet(() -> ResponseEntity.badRequest().body("Receipe id " + id + " not found. Please check the path specified."));
     }
 
     @PostMapping(value = "/")
-    public ResponseEntity addToReceipe(@RequestBody Receipe receipe) {
+    public ResponseEntity<Receipe> addToReceipe(@RequestBody Receipe receipe) {
         return ResponseEntity.ok(receipeRepository.save(receipe));
     }
 }

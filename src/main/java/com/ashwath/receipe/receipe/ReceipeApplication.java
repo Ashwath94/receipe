@@ -8,7 +8,6 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class ReceipeApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(ReceipeApplication.class, args);
 	}
@@ -17,6 +16,4 @@ public class ReceipeApplication {
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 		return builder.build();
 	}
-
-
 }
